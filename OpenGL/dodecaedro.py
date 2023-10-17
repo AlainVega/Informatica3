@@ -39,32 +39,37 @@ def dodecaedro():
     # PENTAGONO REGULAR formado con triangulos equilateros
     # Pentagono base (primero el centro, luego los vertices en sentido antihorario)
     # (p/2, pSIN(2pi/5), 0), (0, 0, 0), (p, 0, 0), (p+pCOS(2pi/5), pSIN(2pi/5), 0), (p/2, 2p, 0), (-pCOS(2pi/5), pSIN(2pi/5), 0)
-    a, b = p*math.cos(2*math.pi/5), p*math.sin(2*math.pi/5)
-    vertices.append((p/2, b, 0))
+    r = p/(2*math.cos(3*math.pi/10))
+    a, b, h = p*math.cos(2*math.pi/5), p*math.sin(2*math.pi/5), (p*math.tan(3*math.pi/10))/2
+    vertices.append((p/2, h, 0))
     vertices.append((0, 0, 0))
     vertices.append((p, 0, 0))
     vertices.append((p+a, b, 0))
-    vertices.append((p/2, 2*b, 0))
+    vertices.append((p/2, h+r, 0))
     vertices.append((-a, b, 0))
     vertices.append((0, 0, 0)) 
 
-    
-    v.append((p, 0, 0))
-    v.append((p+a, b, 0))
+    # v.append((p, 0, 0))
+    # v.append((p+a, b, 0))
 
-    recta(v, (1, 0.52, 0))
+    # recta(v, (1, 0.52, 0))
 
-    m = (0-b)/(p - p+a)
-    alpha = math.atan(m)
-    beta = alpha*(180/math.pi)
+    # m = (0-b)/(p - p+a)
+    # alpha = math.atan(m)
+    # beta = alpha*(180/math.pi)
 
-    print(beta)
+    # print(beta)
 
     # Pentagono trasero gris
     glPushMatrix()
     # glTranslate(a, 0, 0) # trasladar a unidades en x
     cara(vertices, (0.4, 0.4, 0.4)) 
     glPopMatrix()
+
+    # glPushMatrix()
+    # glTranslate(-p, 0, 0)
+    # recta(v, (1, 0.52, 0))
+    # glPopMatrix()
 
     # Petagono de abajo verde
     glPushMatrix()
@@ -73,46 +78,36 @@ def dodecaedro():
     cara(vertices, (0.1, 0.7, 0.2))
     glPopMatrix()
 
-    # # Pentagono de la izquierda rojo
-    # glPushMatrix()
-    # glRotate(30, 0, 0, 1) #rota en z
+    # Pentagono de la izquierda rojo
+    glPushMatrix()
+    glRotate(108, 0, 0, 1) #rota en z
     # glTranslate(-p, 0, 0)
-    # cara(vertices, (0.8, 0, 0))
-    # glPopMatrix()
+    cara(vertices, (0.8, 0, 0))
+    glPopMatrix()
 
     # Pentagono de la derecha azul
     glPushMatrix()
-    # glRotate(-beta, p+a - p, b - 0, 0)
-    # glTranslate(p, 0, 0)
-    # glRotate(-30, 0, 0, 1) #rota en z
-    # glTranslate(p, 0, 0)
-    # glRotate(180, 0, 1, 0)
-    s=beta
-    # glTranslate(p, 0, 0)
-    # glRotate(-s, 1, 0, 0)
-    # glRotate(-s, 0, 1, 0)
-    # glRotate(s, 0, 0, 1)
-    # glRotate(s, 0, 1, 0)
-    glRotate(-s, 1, 0, 0)
+    glTranslate(p, 0, 0)
+    glRotate(-108, 0, 0, 1)
     glTranslate(-p, 0, 0)
     cara(vertices, (0, 0, 0.8))
     glPopMatrix()
  
-    # # Pentagono de arriba izq naranja
-    # glPushMatrix()
-    # # glTranslate(0, p+2*a, 0)
-    # glTranslate(p, 0, 0)
-    # glRotate(108, 0, 0, 1) #rota en z
-    # cara(vertices, (1, 0.52, 0))
-    # glPopMatrix()
+    # Pentagono de arriba izq naranja
+    glPushMatrix()
+    glTranslate(p/2, 0, 0)
+    glTranslate(0, h+r, 0)
+    glRotate(324, 0, 0, 1) #rota en z
+    cara(vertices, (1, 0.52, 0))
+    glPopMatrix()
 
-    # # Pentagono de arriba derecha 
-    # glPushMatrix()
-    # glTranslate(0, p, 0)
-    # glTranslate(p, 0, 0)
-    # glRotate(30, 0, 0, 1) #rota en z
-    # cara(vertices, (0.8, 0.2, 0.5))
-    # glPopMatrix()
+    # Pentagono de arriba derecha 
+    glPushMatrix()
+    glTranslate(-a, 0, 0)
+    glTranslate(0, b, 0)
+    glRotate(36, 0, 0, 1) #rota en z
+    cara(vertices, (0.8, 0.2, 0.5))
+    glPopMatrix()
 
     # # Triangulo izquierdo amarillo
     # glPushMatrix()
