@@ -10,6 +10,7 @@ from OpenGL.GLU import *
 ancho, alto = 800, 800
 ojox, ojoy, ojoz = 1.2, 0.8, 2
 
+# Sirve para dibujar las caras de los poligonos (triangulos)
 def cara(vertices, color):
     glColor(color[0], color[1], color[2], 1) # pintar con este color
     glBegin(GL_TRIANGLES) # dibuja triangulos
@@ -17,10 +18,11 @@ def cara(vertices, color):
         glVertex3fv(vertice)
     glEnd() # fin del contexto de triangulos
 
+# Sirve para dibujar el octaedro.
 def octaedro():
-    vertices = []
-    p = 0.3
-    angulo = 30 
+    vertices = [] # lista de vertices.
+    p = 0.3 # parametro para definir los vertices.
+    angulo = 30 # angulo comun de rotacion para formar el pico del octaedro.
 
     ejes() # pintar los ejes X=rojo, Y=verde, Z=azul
 
@@ -34,7 +36,7 @@ def octaedro():
 
     # Triangulo trasero gris
     glPushMatrix()
-    glRotate(angulo, 1, 0, 0)
+    glRotate(angulo, 1, 0, 0) # rota en x
     cara(vertices, (0.4, 0.4, 0.4)) 
     glPopMatrix()
 
@@ -47,21 +49,21 @@ def octaedro():
     # Triangulo derecho de abajo rojo
     glPushMatrix()
     glTranslate(p, 0, 0) # trasladar p unidades en x
-    glRotate(-angulo, 0, 0, 1)
-    glRotate(-90, 0, 1, 0) #rota en y
-    glRotate(180, 1, 0, 0) #rota en x
+    glRotate(-angulo, 0, 0, 1) # rota en z
+    glRotate(-90, 0, 1, 0) # rota en y
+    glRotate(180, 1, 0, 0) # rota en x
     cara(vertices, (0.8, 0, 0))
     glPopMatrix()
 
     # Triangulo izquierdo de abajo azul
     glPushMatrix()
-    glRotate(angulo, 0, 0, 1)
-    glRotate(-90, 0, 1, 0) #rota en y
-    glRotate(180, 1, 0, 0) #rota en x
+    glRotate(angulo, 0, 0, 1) # rota en z
+    glRotate(-90, 0, 1, 0) # rota en y
+    glRotate(180, 1, 0, 0) # rota en x
     cara(vertices, (0, 0, 0.8))
     glPopMatrix()
  
-    # # Triangulo frontal de abajo naranja (DESCOMENTAR)
+    # # Triangulo frontal de abajo naranja (DESCOMENTAR PARA VER EL OCTAEDRO COMPLETO)
     # glPushMatrix()
     # glTranslate(0, 0, p) # trasladar p unidades en z
     # glRotate(180+angulo, 1, 0, 0) #rota en x
@@ -71,28 +73,29 @@ def octaedro():
     # Triangulo derecho rosado
     glPushMatrix()
     glTranslate(p, 0, 0) # trasladar p unidades en x
-    glRotate(angulo, 0, 0, 1)
-    glRotate(-90, 0, 1, 0) #rota en y
+    glRotate(angulo, 0, 0, 1) # rota en z
+    glRotate(-90, 0, 1, 0) # rota en y
     cara(vertices, (0.8, 0.2, 0.5))
     glPopMatrix()
 
     # Triangulo izquierdo amarillo
     glPushMatrix()
-    glRotate(-angulo, 0, 0, 1)
-    glRotate(-90, 0, 1, 0) #rota en y
+    glRotate(-angulo, 0, 0, 1) # rota en z
+    glRotate(-90, 0, 1, 0) # rota en y
     cara(vertices, (0.7, 0.7, 0.1))
     glPopMatrix()
 
-    # # Triangulo frontal celeste (DESCOMENTAR)
+    # # Triangulo frontal celeste (DESCOMENTAR PARA VER EL OCTAEDRO COMPLETO)
     # glPushMatrix()
     # glTranslate(0, 0, p) # trasladar p unidades en z
-    # glRotate(-angulo, 1, 0, 0)
+    # glRotate(-angulo, 1, 0, 0) # rota en x
     # cara(vertices, (0.2, 0.4, 0.8))
     # glPopMatrix()    
 
-    glFlush() 
+    glFlush() # para forzar a que pinte.
     # glFinish()
 
+# Para dibujar los ejes de coordenadas.
 def ejes():
     largo = 2
     glBegin(GL_LINES) # Contexto lineas
