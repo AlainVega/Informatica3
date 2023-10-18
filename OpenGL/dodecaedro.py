@@ -31,7 +31,7 @@ def recta(vertices, color):
 def dodecaedro():
     vertices = []
     p = 0.2 # paramtetro para definir el ancho y alto de las caras
-    angulo = 30 # angulo comun 
+    angulo = 64 # angulo comun 
     v = []
 
     ejes() # pintar los ejes X=rojo, Y=verde, Z=azul
@@ -51,6 +51,8 @@ def dodecaedro():
     vertices.append((p/2, h+r, 0)) # vertice 4
     vertices.append((-a, b, 0)) # vertice 5
     vertices.append((0, 0, 0)) # vertice 6 (para cerrar el abanico de triangulos.)
+
+    d = (p+2*h)*math.cos(90-64)
 
     # v.append((p, 0, 0))
     # v.append((p+a, b, 0))
@@ -76,12 +78,14 @@ def dodecaedro():
     # Petagono de abajo verde
     glPushMatrix()
     glRotate(180, 1, 0, 0) # rota en x
+    glRotate(-angulo, 1, 0, 0)
     cara(vertices, (0.1, 0.7, 0.2))
     glPopMatrix()
 
     # Pentagono de la izquierda rojo
     glPushMatrix()
     glRotate(108, 0, 0, 1) # rota en z
+    glRotate(angulo, 1, 0, 0)
     cara(vertices, (0.8, 0, 0))
     glPopMatrix()
 
@@ -90,6 +94,7 @@ def dodecaedro():
     glTranslate(p, 0, 0) # destraslada en x
     glRotate(-108, 0, 0, 1) # rota en z
     glTranslate(-p, 0, 0) # traslada  en x
+    glRotate(angulo, 1, 0, 0)
     cara(vertices, (0, 0, 0.8))
     glPopMatrix()
  
@@ -98,6 +103,7 @@ def dodecaedro():
     glTranslate(p/2, 0, 0) # traslada en x
     glTranslate(0, h+r, 0) # traslada en y
     glRotate(324, 0, 0, 1) # rota en z
+    glRotate(angulo, 1, 0, 0)
     cara(vertices, (1, 0.52, 0))
     glPopMatrix()
 
@@ -106,13 +112,15 @@ def dodecaedro():
     glTranslate(-a, 0, 0)  # traslada en x
     glTranslate(0, b, 0) # traslada en y 
     glRotate(36, 0, 0, 1) # rota en z
+    glRotate(angulo, 1, 0, 0)
     cara(vertices, (0.8, 0.2, 0.5))
     glPopMatrix()
 
-    # # Triangulo izquierdo amarillo
+    # # Pentagono frontal amarillo
     # glPushMatrix()
-    # glRotate(-angulo, 0, 0, 1)
-    # glRotate(-90, 0, 1, 0) #rota en y
+    # # glRotate(-angulo, 0, 0, 1)
+    # # glRotate(-90, 0, 1, 0) #rota en y
+    # glTranslate(0, 0, d)
     # cara(vertices, (0.7, 0.7, 0.1))
     # glPopMatrix()
 
@@ -169,6 +177,19 @@ def display():
 
     dodecaedro()
 
+
+def buttons(key, x, y):
+    global ojoz, ojox
+    r = math.sqrt(ojox**2 + ojoz**2)
+    i = r
+    print(f'key={key}')
+    if key == b'd':
+        # print("sssdad")
+        ojoz += 0.1
+        ojox = math.sqrt(r**2 - ojoz)
+        display()
+
+
 # Funcion principal.
 def main():
     glutInit(sys.argv) # Inicializa el motor OpenGL
@@ -180,7 +201,9 @@ def main():
     glutInitWindowSize(ancho, alto) # Dar el ancho y alto de la ventana
     glutInitWindowPosition(1000, 100) # Posicion absoluta de la ventana emergente. (0,0) es de arriba a la izquierda
     glutCreateWindow("Dodecaedro") # Crear ventana emergente y darle titulo.
+    glutKeyboardFunc(buttons)
     glutDisplayFunc(display) # Que pinte la funcion
+    
     # glutIdleFunc(display) # Mantiene la ventana abierta
     glutMainLoop() # mantiene la ventana corriendo en bucle.
     
