@@ -64,14 +64,15 @@ def rotarSobreLinea():
     # Eje de rotacion.
     recta(v, (1, 0.52, 0))
 
+
     # Triangulo (rotado) verde
     glPushMatrix()
-    glTranslate(-0.2, 0, 0)
-    glRotate(-180, 1, 0, 0)
-    glRotate(-180, 0, 1, 0)
-    glRotate(180, 0, 0, 1)
-    glRotate(180, 0, 1, 0)
-    glRotate(180, 1, 0, 0)
+    glTranslate(-0.2, 0, 0) # destrasladar
+    # glRotate(-180, 1, 0, 0)
+    # glRotate(-180, 0, 1, 0)
+    # glRotate(180, 0, 0, 1)
+    # glRotate(180, 0, 1, 0)
+    glRotate(180, 0.1 + 0.2, 0.7, 0)
     glTranslate(0.2, 0, 0) # trasladar recta al origen.
     # recta(v, (0.1, 0.7, 0.2))
     cara(vertices, (0.1, 0.7, 0.2)) 
