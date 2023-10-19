@@ -8,8 +8,13 @@ from OpenGL.GLU import *
 import math
 
 #variables globales
-ancho, alto = 800, 800
-ojox, ojoy, ojoz = 1.2, 0.8, 2
+ancho, alto = 800, 800 # Para la ventana emergente.
+x0, y0, z0 = 1.2, 0.8, 2 # Posicion inicial de la camara (esta en una esfera centrada en el origen) # angulo phi y teta iniciales.
+ojox, ojoy, ojoz = x0, y0, z0
+radio = math.sqrt(x0*x0 + y0*y0 + z0*z0) # de la esfera centrada en el origen.
+phi0, teta0 = math.asin(z0/radio), math.acos(z0/radio)
+phi = math.asin(ojoz/radio) # angulo horizontal de la camara (PLANO XOZ, Y = constante)
+teta = math.acos(ojoz/radio) # angulo vertical de la camara (PLANO YOZ, X = constante)
 
 # Sirve para dibujar la cara del poligono (Pentagono)
 def cara(vertices, color):
@@ -179,15 +184,35 @@ def display():
 
 
 def buttons(key, x, y):
-    global ojoz, ojox
-    r = math.sqrt(ojox**2 + ojoz**2)
-    i = r
+    global ojoz, ojox, ojoy, phi, teta
     print(f'key={key}')
-    if key == b'd':
-        # print("sssdad")
-        ojoz += 0.1
-        ojox = math.sqrt(r**2 - ojoz)
-        display()
+    match key:
+        case b'd':
+            phi -= 0.1
+            ojoz = radio*math.sin(phi)
+            ojox = radio*math.cos(phi)
+            # ojoy = radio*math.cos(teta)
+        case b'a':
+            phi += 0.1
+            ojoz = radio*math.sin(phi)
+            ojox = radio*math.cos(phi)
+            # ojoy = radio*math.cos(teta)
+        case b'w':
+            teta += 0.1
+            ojoy = radio*math.sin(teta)
+            ojoz = radio*math.cos(teta)
+            # ojox = radio*math.cos(phi)
+        case b's':
+            teta -= 0.1
+            ojoy = radio*math.sin(teta)
+            ojoz = radio*math.cos(teta)
+            # ojox = radio*math.cos(phi)
+        case b'r':
+            teta, phi = teta0, phi0
+            ojox = x0
+            ojoy = y0
+            ojoz = z0
+    glutPostRedisplay() # Dibuja otra vez.
 
 
 # Funcion principal.
@@ -201,9 +226,8 @@ def main():
     glutInitWindowSize(ancho, alto) # Dar el ancho y alto de la ventana
     glutInitWindowPosition(1000, 100) # Posicion absoluta de la ventana emergente. (0,0) es de arriba a la izquierda
     glutCreateWindow("Dodecaedro") # Crear ventana emergente y darle titulo.
-    glutKeyboardFunc(buttons)
     glutDisplayFunc(display) # Que pinte la funcion
-    
+    glutKeyboardFunc(buttons) # callback para los botones.
     # glutIdleFunc(display) # Mantiene la ventana abierta
     glutMainLoop() # mantiene la ventana corriendo en bucle.
     
