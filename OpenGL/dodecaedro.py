@@ -16,6 +16,7 @@ phi0, teta0 = math.asin(z0/radio), math.acos(z0/radio)
 teta = math.acos(ojoz/radio) # angulo vertical de la camara (PLANO YOZ, X = constante)
 phi = math.asin(ojoz/radio) # angulo horizontal de la camara (PLANO XOZ, Y = constante)
 angulo = 64 # angulo comun 
+beta = 0
 # phi = math.acos(ojox/(radio*math.sin(teta))) # angulo horizontal de la camara (PLANO XOZ, Y = constante)
 
 # Sirve para dibujar la cara del poligono (Pentagono)
@@ -75,6 +76,10 @@ def dodecaedro():
     # angulo = alpha*(180/math.pi)
 
     # print(angulo)
+
+    # glPushMatrix()
+    glRotate(beta, 0, 1, 0)
+            
 
     # Pentagono trasero gris
     glPushMatrix()
@@ -198,7 +203,7 @@ def dodecaedro():
     glRotate(-angulo, 1, 0, 0) # rota en x
     cara(vertices, (0.1, 0.1, 0.1))
     glPopMatrix()   
-
+    
     glFlush() # Para forzar a que pinte.
     # glFinish()
 
@@ -224,7 +229,9 @@ def ejes():
 # Funcion de pintar
 def display():
     # global ojox, ojoy, ojoz
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
+    glEnable(GL_DEPTH_TEST)
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);  
+    # glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
     # Selecciona la matriz de proyección
     glMatrixMode(GL_PROJECTION)
     glLoadIdentity()  # Inicializar la matriz.
@@ -246,7 +253,7 @@ def display():
 
 # Captura las teclas 'w', 'a', 's' y 'd' para mover la camara en una esfera centrada en el origen.
 def buttons(key, x, y):
-    global ojoz, ojox, ojoy, phi, teta, angulo, angulo
+    global ojoz, ojox, ojoy, phi, teta, angulo, beta
     print(f'key={key}')
     match key:
         case b'd':
@@ -281,6 +288,10 @@ def buttons(key, x, y):
         case b'j':
             angulo -= 4
             print(f'angulo = {angulo}')
+        case b'n':
+            beta += 1
+        case b'm':
+            beta -= 1
 
     # Con la conversion coordenadas esfericas a cilindricas.
 
@@ -318,8 +329,7 @@ def main():
     glutInit(sys.argv) # Inicializa el motor OpenGL
     glutInitDisplayMode(GLUT_RGB) # Elige el modelo de colores
     # Borrar la pantalla
-    glEnable(GL_DEPTH_TEST)
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);  
+    
     # glDepthFunc(GL_LEQUAL)
     
     glutInitWindowSize(ancho, alto) # Dar el ancho y alto de la ventana
