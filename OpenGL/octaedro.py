@@ -5,10 +5,17 @@
 from OpenGL.GL import *
 from OpenGL.GLUT import *
 from OpenGL.GLU import *
+import math
 
 #variables globales
 ancho, alto = 800, 800
-ojox, ojoy, ojoz = 1.2, 0.8, 2
+x0, y0, z0 = 1.2, 0.8, 2 # Posicion inicial de la camara (esta en una esfera centrada en el origen) # angulo phi y teta iniciales.
+ojox, ojoy, ojoz = x0, y0, z0
+radio = math.sqrt(x0*x0 + y0*y0 + z0*z0) # de la esfera centrada en el origen.
+phi0, teta0 = math.asin(z0/radio), math.acos(z0/radio)
+teta = math.acos(ojoz/radio) # angulo vertical de la camara (PLANO YOZ, X = constante)
+phi = math.asin(ojoz/radio) # angulo horizontal de la camara (PLANO XOZ, Y = constante)
+angulo = 30 # angulo comun 
 
 # Sirve para dibujar las caras de los poligonos (triangulos)
 def cara(vertices, color):
@@ -22,7 +29,7 @@ def cara(vertices, color):
 def octaedro():
     vertices = [] # lista de vertices.
     p = 0.3 # parametro para definir los vertices.
-    angulo = 30 # angulo comun de rotacion para formar el pico del octaedro.
+    # angulo = 30 # angulo comun de rotacion para formar el pico del octaedro.
 
     ejes() # pintar los ejes X=rojo, Y=verde, Z=azul
 
@@ -63,12 +70,12 @@ def octaedro():
     cara(vertices, (0, 0, 0.8))
     glPopMatrix()
  
-    # # Triangulo frontal de abajo naranja (DESCOMENTAR PARA VER EL OCTAEDRO COMPLETO)
-    # glPushMatrix()
-    # glTranslate(0, 0, p) # trasladar p unidades en z
-    # glRotate(180+angulo, 1, 0, 0) #rota en x
-    # cara(vertices, (1, 0.52, 0))
-    # glPopMatrix()
+    # Triangulo frontal de abajo naranja (DESCOMENTAR PARA VER EL OCTAEDRO COMPLETO)
+    glPushMatrix()
+    glTranslate(0, 0, p) # trasladar p unidades en z
+    glRotate(180+angulo, 1, 0, 0) #rota en x
+    cara(vertices, (1, 0.52, 0))
+    glPopMatrix()
 
     # Triangulo derecho rosado
     glPushMatrix()
@@ -85,12 +92,12 @@ def octaedro():
     cara(vertices, (0.7, 0.7, 0.1))
     glPopMatrix()
 
-    # # Triangulo frontal celeste (DESCOMENTAR PARA VER EL OCTAEDRO COMPLETO)
-    # glPushMatrix()
-    # glTranslate(0, 0, p) # trasladar p unidades en z
-    # glRotate(-angulo, 1, 0, 0) # rota en x
-    # cara(vertices, (0.2, 0.4, 0.8))
-    # glPopMatrix()    
+    # Triangulo frontal celeste (DESCOMENTAR PARA VER EL OCTAEDRO COMPLETO)
+    glPushMatrix()
+    glTranslate(0, 0, p) # trasladar p unidades en z
+    glRotate(-angulo, 1, 0, 0) # rota en x
+    cara(vertices, (0.2, 0.4, 0.8))
+    glPopMatrix()    
 
     glFlush() # para forzar a que pinte.
     # glFinish()
@@ -138,6 +145,45 @@ def display():
 
     octaedro()
 
+# Captura las teclas 'w', 'a', 's' y 'd' para mover la camara en una esfera centrada en el origen.
+def buttons(key, x, y):
+    global ojoz, ojox, ojoy, phi, teta, angulo, angulo
+    print(f'key={key}')
+    match key:
+        case b'd':
+            phi -= 0.1
+            ojoz = radio*math.sin(phi)
+            ojox = radio*math.cos(phi)
+            # ojoy = radio*math.cos(teta)
+        case b'a':
+            phi += 0.1
+            ojoz = radio*math.sin(phi)
+            ojox = radio*math.cos(phi)
+            # ojoy = radio*math.cos(teta)
+        case b'w':
+            teta += 0.1
+            ojoy = radio*math.sin(teta)
+            ojoz = radio*math.cos(teta)
+            # ojox = radio*math.cos(phi)
+        case b's':
+            teta -= 0.1
+            ojoy = radio*math.sin(teta)
+            ojoz = radio*math.cos(teta)
+            # ojox = radio*math.cos(phi)
+        case b'r':
+            teta, phi = teta0, phi0
+            ojox = x0
+            ojoy = y0
+            ojoz = z0
+            print('La camara volvio a su posicion original.')
+        case b'l':
+            angulo += 4
+            print(f'angulo = {angulo}')
+        case b'j':
+            angulo -= 4
+            print(f'angulo = {angulo}')
+    glutPostRedisplay() # Dibuja otra vez.
+
 # Funcion principal.
 def main():
     glutInit(sys.argv) # Inicializa el motor OpenGL
@@ -150,6 +196,7 @@ def main():
     glutInitWindowPosition(1000, 100) # Posicion absoluta de la ventana emergente. (0,0) es de arriba a la izquierda
     glutCreateWindow("Octaedro") # Crear ventana emergente y darle titulo.
     glutDisplayFunc(display) # Que pinte la funcion
+    glutKeyboardFunc(buttons) # callback para los botones.
     # glutIdleFunc(display) # Mantiene la ventana abierta
     glutMainLoop() # mantiene la ventana corriendo en bucle.
     
