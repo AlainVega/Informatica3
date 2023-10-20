@@ -15,7 +15,8 @@ radio = math.sqrt(x0*x0 + y0*y0 + z0*z0) # de la esfera centrada en el origen.
 phi0, teta0 = math.asin(z0/radio), math.acos(z0/radio)
 teta = math.acos(ojoz/radio) # angulo vertical de la camara (PLANO YOZ, X = constante)
 phi = math.asin(ojoz/radio) # angulo horizontal de la camara (PLANO XOZ, Y = constante)
-angulo = 30 # angulo comun 
+angulo = 30 # angulo comun (Se controla con 'j' y 'l')
+beta = 0 # angulo de giro de la figura entera (Se controla con 'n' y 'm')
 
 # Sirve para dibujar las caras de los poligonos (triangulos)
 def cara(vertices, color):
@@ -40,6 +41,8 @@ def octaedro():
     vertices.append((0, 0, 0))
     vertices.append((p, 0, 0))
     vertices.append((p/2, p, 0))
+
+    glRotate(beta, 0, 1, 0)
 
     # Triangulo trasero gris
     glPushMatrix()
@@ -147,7 +150,7 @@ def display():
 
 # Captura las teclas 'w', 'a', 's' y 'd' para mover la camara en una esfera centrada en el origen.
 def buttons(key, x, y):
-    global ojoz, ojox, ojoy, phi, teta, angulo, angulo
+    global ojoz, ojox, ojoy, phi, teta, angulo, beta
     print(f'key={key}')
     match key:
         case b'd':
@@ -182,6 +185,10 @@ def buttons(key, x, y):
         case b'j':
             angulo -= 4
             print(f'angulo = {angulo}')
+        case b'n':
+            beta += 1
+        case b'm':
+            beta -= 1
     glutPostRedisplay() # Dibuja otra vez.
 
 # Funcion principal.

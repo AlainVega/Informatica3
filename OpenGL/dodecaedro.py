@@ -15,8 +15,8 @@ radio = math.sqrt(x0*x0 + y0*y0 + z0*z0) # de la esfera centrada en el origen.
 phi0, teta0 = math.asin(z0/radio), math.acos(z0/radio)
 teta = math.acos(ojoz/radio) # angulo vertical de la camara (PLANO YOZ, X = constante)
 phi = math.asin(ojoz/radio) # angulo horizontal de la camara (PLANO XOZ, Y = constante)
-angulo = 64 # angulo comun 
-beta = 0
+angulo = 64 # angulo comun (Se controla con 'j' y 'l')
+beta = 0 # angulo de giro de la figura entera (Se controla con 'n' y 'm')
 # phi = math.acos(ojox/(radio*math.sin(teta))) # angulo horizontal de la camara (PLANO XOZ, Y = constante)
 
 # Sirve para dibujar la cara del poligono (Pentagono)
