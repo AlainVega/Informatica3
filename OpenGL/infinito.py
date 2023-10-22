@@ -9,6 +9,8 @@
 # Operacion con las teclas:
 # Tecla 's' mover hacia abajo 
 # Tecla 'a' mover a la izquierda
+# Tecla 'w' mover hacia arriba 
+# Tecla 'a' mover a la derecha
 # Tecla 'i' escalar toda la figura (reducir)
 # Tecla 'k' escalar toda la figura (aumentar)
 # Tecla '-' aumentar el valor 4) 
@@ -33,7 +35,9 @@ t = 0
 a = 0.141
 r = 0.16
 l = 0.68
-n = l -r -2*a
+n = l -r -(3*a)/2
+vertical, horizontal = 0,0
+size = 1
 
 # Sirve para dibujar la cara del poligono (Hexagono)
 def cara(vertices, color):
@@ -105,21 +109,24 @@ def infinito():
     vertices.append((-a/2,0,0))
     vertices.append((0,-a/2,0))
 
-    punto(vertices, (0.7, 0.2, 0))
+    # punto(vertices, (0.7, 0.2, 0))
+
+    glTranslate(horizontal, vertical, 0)
+    glScale(size, size, 0)
 
     centro = (a/2 + n, 0)
-    puntos = arco(centro, r, (0.7, 0.2, 0))
-    recta([(a/2,0,0), puntos[0], (a/2,0,0), puntos[1]], (0.2, 0.8, 0.1))
+    puntos = arco(centro, r, (1, 1, 1))
+    recta([(a/2,0,0), puntos[0], (a/2,0,0), puntos[1]], (1, 1, 1))
     
-    puntos = arco(centro, r+a, (0.7, 0.2, 0))
-    recta([(0,-a/2,0), puntos[0], (0,a/2,0), puntos[1]], (0.2, 0.8, 0.1))
+    puntos = arco(centro, r+a, (1, 1, 1))
+    recta([(0,-a/2,0), puntos[0], (0,a/2,0), puntos[1]], (1, 1, 1))
 
     centro = (-a/2 - n, 0)
-    puntos = arco(centro, r, (0.7, 0.2, 0))
-    recta([(-a/2,0,0), puntos[0], (-a/2,0,0), puntos[1]], (0.2, 0.8, 0.1))
+    puntos = arco(centro, r, (1, 1, 1))
+    recta([(-a/2,0,0), puntos[0], (-a/2,0,0), puntos[1]], (1, 1, 1))
 
-    puntos = arco(centro, r+a, (0.7, 0.2, 0))
-    recta([(0,-a/2,0), puntos[0], (0,a/2,0), puntos[1]], (0.2, 0.8, 0.1))
+    puntos = arco(centro, r+a, (1, 1, 1))
+    recta([(0,-a/2,0), puntos[0], (0,a/2,0), puntos[1]], (1, 1, 1))
 
     glFlush() # Para forzar a que pinte.
     # glFinish()
@@ -191,15 +198,28 @@ def display():
 
 # Captura las teclas
 def buttons(key, x, y):
-    global ojoz, ojox, ojoy, beta, lightZeroPosition, t
+    global ojoz, ojox, ojoy, horizontal, vertical, size, a
     print(f'key={key}')
     match key:
         case b'r':
-            ojox = x0
-            ojoy = y0
-            ojoz = z0
-            beta = 0
-            print('La camara y la figura volvieron a su posicion original.')
+            vertical, horizontal, size, a = 0, 0, 1, 0.141
+            print('La figura volvio a su tamanho y posicion inicial.')
+        case b's':
+            vertical -= 0.01
+        case b'a':
+            horizontal -= 0.01
+        case b'w':
+            vertical += 0.01
+        case b'd':
+            horizontal += 0.01
+        case b'i':
+            size += 0.01
+        case b'k':
+            size -= 0.01
+        case b'+':
+            a += 0.005
+        case b'-':
+            a -= 0.005
     glutPostRedisplay() # Dibuja otra vez.
 
 # Funcion principal.
