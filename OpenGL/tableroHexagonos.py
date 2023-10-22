@@ -217,110 +217,12 @@ def tablerohexagono():
     cara(vertices, (0.2, 0.7, 0.8))
     glPopMatrix()
 
-    # Hexagono nivel 3 (2)
+    # Hexagono nivel 3 (12)
     glPushMatrix()
     glTranslate(-p-a, 3*h, 0)
     cara(vertices, (0.2, 0.7, 0.8))
     glPopMatrix()
 
-    # # hexagono de la derecha azul
-    # glPushMatrix()
-    # glTranslate(p, 0, 0) # destraslada en x
-    # glRotate(-108, 0, 0, 1) # rota en z
-    # glTranslate(-p, 0, 0) # traslada  en x
-    # glRotate(angulo, 1, 0, 0) # rota en x
-    # cara(vertices, (0, 0, 0.8))
-    # glPopMatrix()
- 
-    # # hexagono de arriba derecha naranja
-    # glPushMatrix()
-    # glTranslate(p/2, 0, 0) # traslada en x
-    # glTranslate(0, h+r, 0) # traslada en y
-    # glRotate(324, 0, 0, 1) # rota en z
-    # glRotate(angulo, 1, 0, 0) # rota en x
-    # cara(vertices, (1, 0.52, 0))
-    # glPopMatrix()
-
-    # # hexagono de arriba izquierda rosado
-    # glPushMatrix()
-    # glTranslate(-a, 0, 0)  # traslada en x
-    # glTranslate(0, b, 0) # traslada en y 
-    # glRotate(36, 0, 0, 1) # rota en z
-    # glRotate(angulo, 1, 0, 0) # rota en x
-    # cara(vertices, (0.8, 0.2, 0.5))
-    # glPopMatrix()
-
-    # # hexagono frontal amarillo
-    # glPushMatrix()
-    # glTranslate(0, 0, d) # move en z
-    # glTranslated(a0, b0, c0) # destraslada
-    # glRotate(36, a2, b2, c2) # rota sobre el vector director de la recta
-    # glTranslated(-a0, -b0, -c0) # traslada la recta al origen
-    # cara(vertices, (0.7, 0.7, 0.1))
-    # # recta(v, (1, 0.52, 0)) 
-    # glPopMatrix()
-
-    # # hexagono frontal de abajo a la derecha purpura
-    # glPushMatrix()
-    # glTranslate(0, 0, d) # move en z
-    # glTranslated(a0, b0, c0) # destraslada
-    # glRotate(36, a2, b2, c2) # rota sobre el vector director de la recta
-    # glTranslated(-a0, -b0, -c0) # traslada la recta al origen
-    # glRotate(angulo, 1, 0, 0) # rota en x
-    # glRotate(180, 1, 0, 0) # rota en x
-    # cara(vertices, (0.4, 0.4, 0.8))
-    # glPopMatrix()     
-
-    # # hexagono frontal de abajo a la izquierda celeste
-    # glPushMatrix()
-    # glTranslate(0, 0, d) # move en z
-    # glTranslated(a0, b0, c0) # destraslada
-    # glRotate(36, a2, b2, c2) # rota sobre el vector director de la recta
-    # glTranslated(-a0, -b0, -c0) # traslada la recta al origen
-    # glRotate(108, 0, 0, 1) # rota en z
-    # glRotate(-angulo, 1, 0, 0) # rota en x
-    # cara(vertices, (0.2, 0.7, 0.8))
-    # glPopMatrix()   
-
-    # # hexagono frontal a la derecha beige
-    # glPushMatrix()
-    # glTranslate(0, 0, d) # move en z
-    # glTranslated(a0, b0, c0) # destraslada
-    # glRotate(36, a2, b2, c2) # rota sobre el vector director de la recta
-    # glTranslated(-a0, -b0, -c0) # traslada la recta al origen
-    # glTranslate(p, 0, 0) # destraslada en x
-    # glRotate(-108, 0, 0, 1) # rota en z
-    # glTranslate(-p, 0, 0) # traslada en x
-    # glRotate(-angulo, 1, 0, 0) # rota en x
-    # cara(vertices, (0.7, 0.7, 0.7))
-    # glPopMatrix()   
-
-    # # hexagono frontal a la izquierda lila
-    # glPushMatrix()
-    # glTranslate(0, 0, d) # move en z
-    # glTranslated(a0, b0, c0) # destraslada
-    # glRotate(36, a2, b2, c2) # rota sobre el vector director de la recta
-    # glTranslated(-a0, -b0, -c0) # traslada la recta al origen
-    # glTranslate(-a, 0, 0)  # traslada en x
-    # glTranslate(0, b, 0) # traslada en y 
-    # glRotate(36, 0, 0, 1) # rota en z
-    # glRotate(-angulo, 1, 0, 0) # rota en x
-    # cara(vertices, (0.4, 0.1, 0.7))
-    # glPopMatrix()   
-
-    # # hexagono frontal de arriba negro
-    # glPushMatrix()
-    # glTranslate(0, 0, d) # move en z
-    # glTranslated(a0, b0, c0) # destraslada
-    # glRotate(36, a2, b2, c2) # rota sobre el vector director de la recta
-    # glTranslated(-a0, -b0, -c0) # traslada la recta al origen
-    # glTranslate(p/2, 0, 0) # traslada en x
-    # glTranslate(0, h+r, 0) # traslada en y
-    # glRotate(324, 0, 0, 1) # rota en z
-    # glRotate(-angulo, 1, 0, 0) # rota en x
-    # cara(vertices, (0.1, 0.1, 0.1))
-    # glPopMatrix()   
-    
     glFlush() # Para forzar a que pinte.
     # glFinish()
 
