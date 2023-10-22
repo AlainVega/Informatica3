@@ -22,13 +22,7 @@ import math
 ancho, alto = 800, 800 # Para la ventana emergente.
 x0, y0, z0 = 1.2, 0.8, 2 # Posicion inicial de la camara (esta en una esfera centrada en el origen) # angulo phi y teta iniciales.
 ojox, ojoy, ojoz = x0, y0, z0
-radio = math.sqrt(x0*x0 + y0*y0 + z0*z0) # de la esfera centrada en el origen.
-phi0, teta0 = math.asin(z0/radio), math.acos(z0/radio)
-teta = math.acos(ojoz/radio) # angulo vertical de la camara (PLANO YOZ, X = constante)
-phi = math.asin(ojoz/radio) # angulo horizontal de la camara (PLANO XOZ, Y = constante)
-angulo = 64 # angulo comun (Se controla con 'j' y 'l')
-beta = 0 # angulo de giro de la figura entera (Se controla con 'n' y 'm')
-# phi = math.acos(ojox/(radio*math.sin(teta))) # angulo horizontal de la camara (PLANO XOZ, Y = constante)
+beta = 0
 
 # Sirve para dibujar la cara del poligono (Hexagono)
 def cara(vertices, color):
@@ -272,45 +266,29 @@ def display():
 
 # Captura las teclas 'w', 'a', 's' y 'd' para mover la camara en una esfera centrada en el origen.
 def buttons(key, x, y):
-    global ojoz, ojox, ojoy, phi, teta, angulo, beta
+    global ojoz, ojox, ojoy, beta
     print(f'key={key}')
     match key:
-        case b'd':
-            phi -= 0.1
-            ojoz = radio*math.sin(phi)
-            ojox = radio*math.cos(phi)
-            # ojoy = radio*math.cos(teta)
-        case b'a':
-            phi += 0.1
-            ojoz = radio*math.sin(phi)
-            ojox = radio*math.cos(phi)
-            # ojoy = radio*math.cos(teta)
-        case b'w':
-            teta += 0.1
-            ojoy = radio*math.sin(teta)
-            ojoz = radio*math.cos(teta)
-            # ojox = radio*math.cos(phi)
-        case b's':
-            teta -= 0.1
-            ojoy = radio*math.sin(teta)
-            ojoz = radio*math.cos(teta)
-            # ojox = radio*math.cos(phi)
         case b'r':
-            teta, phi = teta0, phi0
             ojox = x0
             ojoy = y0
             ojoz = z0
-            print('La camara volvio a su posicion original.')
+            beta = 0
+            print('La camara y la figura volvieron a su posicion original.')
         case b'l':
             angulo += 4
             print(f'angulo = {angulo}')
         case b'j':
             angulo -= 4
             print(f'angulo = {angulo}')
-        case b'n':
-            beta += 1
-        case b'm':
-            beta -= 1
+        case b'+':
+            ojox += 0.1
+            ojoz += 0.1
+        case b'-':
+            ojox -= 0.1
+            ojoz -= 0.1
+        case b'w':
+            beta += 4
     glutPostRedisplay() # Dibuja otra vez.
 
 # Funcion principal.
