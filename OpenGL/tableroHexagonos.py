@@ -8,9 +8,9 @@
 # 2) La tecla “-” deberá disminuir el tamaño (zoom-out)
 # 3) La tecla “w” deberá rotar el tablero completo en dirección positiva del eje “y”
 # 4) La tecla “x” deberá mover la fuente de luz hacia el lado positivo de las “x”
-# 5) La tecla “y” deberá mover la fuente de luz hacia el ladod positivo de las “y”
+# 5) La tecla “y” deberá mover la fuente de luz hacia el lado positivo de las “y”
 # 6) La tecla “c” deberá mover la fuente de luz hacia el centro del tablero
-# 7) La tecla “f” deberá mover la fuente alejándose
+# 7) La tecla “f” deberá mover la fuente alejándose del centro del tablero
 
 #imports
 from OpenGL.GL import *
@@ -23,10 +23,25 @@ ancho, alto = 800, 800 # Para la ventana emergente.
 x0, y0, z0 = 1.2, 0.8, 2 # Posicion inicial de la camara (esta en una esfera centrada en el origen) # angulo phi y teta iniciales.
 ojox, ojoy, ojoz = x0, y0, z0
 beta = 0
+lightZeroPosition = [0.7, 0.4, 1.5, 0] # posicion de la fuente de luz
+lightZeroColor = [1, 1, 0.6, 0] # color de la fuente de luz
+rojo = [1, 0, 0, 1]
+ambientColor = [0.7, 0.7, 0.3, 1] # tono de la luz ambiente
+t = 0
+centroTablero = [0, 0, 0]
 
 # Sirve para dibujar la cara del poligono (Hexagono)
 def cara(vertices, color):
+    # Setear las propiedades del material.
+    c = [color[0], color[1], color[2], 1]
+    glMaterialfv(GL_FRONT, GL_DIFFUSE, c) 
+    glMaterialfv(GL_FRONT, GL_SPECULAR, rojo) 
+    glMaterialfv(GL_FRONT, GL_EMISSION, c) 
+    glMaterialfv(GL_FRONT, GL_SHININESS, 10) 
+    glMaterialfv(GL_FRONT, GL_AMBIENT, c) 
+
     glColor(color[0], color[1], color[2], 1) # pintar con este color
+
     glBegin(GL_TRIANGLE_FAN) # dibuja triangulos para simular el hexagono.
     for vertice in vertices:
         glVertex3fv(vertice)
@@ -42,11 +57,9 @@ def recta(vertices, color):
 
 # Sirve para definir el tablero.
 def tablerohexagono():
+    global centroTablero
     vertices = []
     p = 0.1 # paramtetro para definir el ancho y alto de las caras
-    # angulo = 0 # angulo comun 
-    # angulo = 0 # angulo2 comun
-    v = []
 
     ejes() # pintar los ejes X=rojo, Y=verde, Z=azul
 
@@ -68,23 +81,15 @@ def tablerohexagono():
     vertices.append((-a, b, 0)) # vertice 6
     vertices.append((0, 0, 0)) # vertice 7 (para cerrar el abanico de triangulos.)
 
-    # d = (p+2*h)*math.cos(math.radians(90-64))
-    w = 90 - math.asin(h*math.sin(math.radians(90-64))/b)
-    d = b*math.cos(math.radians(90-w)) + 2*h*math.cos(math.radians(90-64))
+    centroTablero[0] = p/2
+    centroTablero[1] = h
+    centroTablero[2] = 0
 
-    a0, b0, c0 = p/2, h, 0          # centro del hexagono
-    a1, b1, c1 = p/2, h, 0.5         # centro del hexagono pero desplazado en z
-    a2, b2, c2 = a1-a0, b1-b0, c1-c0  # vector desde el origen (resta de vectores)
-
-    v.append((a0, b0, c0)) # vertice 1 de la recta
-    v.append((a1, b1, c1)) # vertice 2 de la recta
-
-    # m = (0-b)/(p - p+a)
-    # alpha = math.atan(m)
-    # angulo = alpha*(180/math.pi)
-
-    # print(angulo)
-
+    glPushMatrix()
+    glTranslate(lightZeroPosition[0], lightZeroPosition[1], lightZeroPosition[2])
+    # glutWireSphere(0.01, 10, 70) # para ver el foco de luz
+    glPopMatrix()
+    
     # glPushMatrix()
     glRotate(beta, 0, 1, 0)
             
@@ -92,12 +97,6 @@ def tablerohexagono():
     glPushMatrix()
     cara(vertices, (0.4, 0.1, 0.7)) 
     glPopMatrix()
-
-    # Recta paralela al eje z que pasa por centro del hexagono base 
-    # glPushMatrix()
-    # glTranslate(-p, 0, 0)
-    # recta(v, (1, 0.52, 0))
-    # glPopMatrix()
 
     # El nivel 2 (verde) se va a dibujar en sentido horario
     # (1) arriba
@@ -224,16 +223,25 @@ def tablerohexagono():
 def ejes():
     largo = 100
     glBegin(GL_LINES) # Contexto lineas
+
     # Eje X (ROJO)
     glColor3f(1, 0, 0)
+    rojo = [1, 0, 0, 0]
+    glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, rojo)
     glVertex3f(0, 0, 0)
     glVertex3f(largo, 0, 0)
+
     # Eje Y (VERDE)
     glColor3f(0, 1, 0)
+    verde = [0, 1, 0, 0]
+    glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, verde)
     glVertex3f(0, 0, 0)
     glVertex3f(0, largo, 0)
+
     # Eje Z (AZUL)
     glColor3f(0, 0, 1)
+    azul = [0, 0, 1, 0]
+    glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, azul)
     glVertex3f(0, 0, 0)
     glVertex3f(0, 0, largo)
 
@@ -244,7 +252,20 @@ def display():
     # global ojox, ojoy, ojoz
     glEnable(GL_DEPTH_TEST)
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);  
-    # glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
+    
+    # Luz
+    origen = [0,0,0]
+    # glShadeModel(GL_SMOOTH)
+    # glEnable(GL_CULL_FACE)
+    glEnable(GL_LIGHTING) # habilitar luces
+    glLightfv(GL_LIGHT0, GL_POSITION, lightZeroPosition) # posicion de la luz
+    glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, origen) # direccion de la luz
+    glLightfv(GL_LIGHT0, GL_DIFFUSE, lightZeroColor) # color difuso de la luz
+    glLightfv(GL_LIGHT0, GL_AMBIENT, ambientColor) # color ambiente
+    glLightf(GL_LIGHT0, GL_CONSTANT_ATTENUATION, 0.1)
+    glLightf(GL_LIGHT0, GL_LINEAR_ATTENUATION, 0.05)
+    glEnable(GL_LIGHT0)
+
     # Selecciona la matriz de proyección
     glMatrixMode(GL_PROJECTION)
     glLoadIdentity()  # Inicializar la matriz.
@@ -266,7 +287,7 @@ def display():
 
 # Captura las teclas 'w', 'a', 's' y 'd' para mover la camara en una esfera centrada en el origen.
 def buttons(key, x, y):
-    global ojoz, ojox, ojoy, beta
+    global ojoz, ojox, ojoy, beta, lightZeroPosition, t
     print(f'key={key}')
     match key:
         case b'r':
@@ -289,6 +310,20 @@ def buttons(key, x, y):
             ojoz -= 0.1
         case b'w':
             beta += 4
+        case b'x':
+            lightZeroPosition[0] += 0.01
+        case b'y':
+            lightZeroPosition[1] += 0.01
+        case b'c':
+            t += 0.001
+            lightZeroPosition[0] = lightZeroPosition[0] + t*(centroTablero[0]-lightZeroPosition[0])
+            lightZeroPosition[1] = lightZeroPosition[1] + t*(centroTablero[1]-lightZeroPosition[1])
+            lightZeroPosition[2] = lightZeroPosition[2] + t*(centroTablero[2]-lightZeroPosition[2])
+        case b'f':
+            t += 0.001
+            lightZeroPosition[0] = lightZeroPosition[0] + t*(lightZeroPosition[0]-centroTablero[0])
+            lightZeroPosition[1] = lightZeroPosition[1] + t*(lightZeroPosition[1]-centroTablero[1])
+            lightZeroPosition[2] = lightZeroPosition[2] + t*(lightZeroPosition[2]-centroTablero[2])
     glutPostRedisplay() # Dibuja otra vez.
 
 # Funcion principal.
