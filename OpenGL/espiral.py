@@ -67,33 +67,10 @@ def punto(vertices, color):
         glVertex3fv(vertice)
     glEnd() 
 
-def arco(centro, radio, color):
-    glColor(color[0], color[1], color[2], 1) # pintar con este color
-    glBegin(GL_LINE_STRIP) 
-    x, y = 0, 0
-    x0, y0, x1, y1 = 0,0,0,0
-    if centro[0] >= 0:
-        for alpha in range(-90, 91):
-            x = radio*math.cos(math.radians(alpha)) + centro[0]
-            y = radio*math.sin(math.radians(alpha)) + centro[1]
-            glVertex3f(x, y, 0)
-        x0, y0 = radio*math.cos(math.radians(-90)) + centro[0], radio*math.sin(math.radians(-90)) + centro[1]
-        x1, y1 = radio*math.cos(math.radians(90)) + centro[0], radio*math.sin(math.radians(90)) + centro[1]
-    else:
-        for alpha in range(-90, 91):
-            x = -radio*math.cos(math.radians(alpha)) + centro[0]
-            y = -radio*math.sin(math.radians(alpha)) + centro[1]
-            glVertex3f(x, y, 0)
-        x0, y0 = -radio*math.cos(math.radians(-90)) + centro[0], radio*math.sin(math.radians(-90)) + centro[1]
-        x1, y1 = -radio*math.cos(math.radians(90)) + centro[0], radio*math.sin(math.radians(90)) + centro[1]
-    glEnd()
-    return ((x0, y0, 0), (x1, y1, 0))
-    
-
 # Sirve para definir el espiral.
 def espiral():
-    vertices = []
-    v= []
+    interior = []
+    exterior = []
 
     ejes() # pintar los ejes X=rojo, Y=verde, Z=azul
 
@@ -103,17 +80,17 @@ def espiral():
     glTranslate(horizontal, vertical, 0)
     glScale(size, size, 0)
 
-    # Contorno interior
+    # Contorno interior (espiral interior)
     radios = [i * 0.0002 for i in range(1, 360*k)]
     alpha = 0
     for radio in radios:
         alpha += 0.01
         x0 = radio*math.cos(alpha) 
         y0 = radio*math.sin(alpha) 
-        vertices.append((x0, y0, 0))
-    recta(vertices, (1, 1, 1))
+        interior.append((x0, y0, 0))
+    recta(interior, (1, 1, 1))
 
-    # Contorno exterior
+    # Contorno exterior (espiral exterior)
     alpha = 0
     i = 0
     for radio in radios:
@@ -124,15 +101,16 @@ def espiral():
             i = a
         x1 = (radio + i)*math.cos(alpha) 
         y1 = (radio + i)*math.sin(alpha)
-        v.append((x1, y1, 0))
-    recta(v, (1, 1, 1))
+        exterior.append((x1, y1, 0))
+    recta(exterior, (1, 1, 1))
 
-    v2 = []
+    vertices = []
 
     for i in range(len(radios)):
-        v2.append(vertices[i])
-        v2.append(v[i])
-    cara(v2, (1,1,1))
+        vertices.append(interior[i])
+        vertices.append(exterior[i])
+    cara(vertices, (1,1,1)) # Pinta el relleno entre contorno exterior e interior
+
     glFlush() # Para forzar a que pinte.
     # glFinish()
 
