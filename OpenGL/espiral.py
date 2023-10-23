@@ -46,7 +46,7 @@ def cara(vertices, color):
 
     glColor(color[0], color[1], color[2], 1) # pintar con este color
 
-    glBegin(GL_TRIANGLE_FAN) # dibuja triangulos para simular el hexagono.
+    glBegin(GL_TRIANGLE_STRIP) # dibuja triangulos para simular el hexagono.
     for vertice in vertices:
         glVertex3fv(vertice)
     glEnd() # fin del contexto de triangulos
@@ -127,6 +127,12 @@ def espiral():
         v.append((x1, y1, 0))
     recta(v, (1, 1, 1))
 
+    v2 = []
+
+    for i in range(len(radios)):
+        v2.append(vertices[i])
+        v2.append(v[i])
+    cara(v2, (1,1,1))
     glFlush() # Para forzar a que pinte.
     # glFinish()
 
