@@ -155,7 +155,7 @@ def infinito():
     cara([vertice4, vertice3, exterior[0], interior[0]], (1,1,1)) # Pintar lazo de arriba izquierda
     cara([vertice2, vertice3, exterior[-1], interior[-1]], (1,1,1)) # Pintar lazo de abajo izquierda
    
-    cara([vertice1, vertice4, vertice3, vertice2, vertice1], (1,1,1)) # Pintar cuadrado central
+    cara([vertice1, vertice4, vertice2, vertice3], (1,1,1)) # Pintar cuadrado central
 
     glFlush() # Para forzar a que pinte.
     # glFinish()
