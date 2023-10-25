@@ -10,20 +10,18 @@ import math
 ancho, alto = 800, 800 # Para la ventana emergente.
 x0, y0, z0 = 1.2, 0.8, 2 # Posicion inicial de la camara (esta en una esfera centrada en el origen) # angulo phi y teta iniciales.
 ojox, ojoy, ojoz = x0, y0, z0
-beta = 0
-lightZeroPosition = [0.7, 0.4, 1.5, 0] # posicion de la fuente de luz
-lightZeroColor = [1, 1, 0.6, 0] # color de la fuente de luz
-rojo = [1, 0, 0, 1]
-ambientColor = [0.7, 0.7, 0.3, 1] # tono de la luz ambiente
-radio = 0.3
-cantidadPuntas = 6
-vertical, horizontal = 0,0
-size = 1
+radio = math.sqrt(x0*x0 + y0*y0 + z0*z0) # de la esfera centrada en el origen.
+phi0, teta0 = math.asin(z0/radio), math.acos(z0/radio)
+teta = math.acos(ojoz/radio) # angulo vertical de la camara (PLANO YOZ, X = constante)
+phi = math.asin(ojoz/radio) # angulo horizontal de la camara (PLANO XOZ, Y = constante)
+cantidadHojasPar = 4 # cantidad pares de hojas de la rama
+alturaHoja = 0.1 # altura del tallo de cada hoja
+beta = math.radians(45) # angulo de inclinacion respecto a la recta raiz
 
 # Sirve para dibujar la cara del poligono. (Pintar el ancho del hoja)
 def cara(vertices, color):
     # Setear las propiedades del material.
-    c = [color[0], color[1], color[2], 1]
+    # c = [color[0], color[1], color[2], 1]
     # glMaterialfv(GL_FRONT, GL_DIFFUSE, c) 
     # glMaterialfv(GL_FRONT, GL_SPECULAR, rojo) 
     # glMaterialfv(GL_FRONT, GL_EMISSION, c) 
@@ -83,16 +81,12 @@ def arco(centro, radio, color):
             y = radio*math.sin(math.radians(alpha)) + centro[1]
             glVertex3f(x, y, 0)
             v.append((x,y,0))
-        # x0, y0 = radio*math.cos(math.radians(-90)) + centro[0], radio*math.sin(math.radians(-90)) + centro[1]
-        # x1, y1 = radio*math.cos(math.radians(90)) + centro[0], radio*math.sin(math.radians(90)) + centro[1]
     else:
         for alpha in range(-90, 91):
             x = -radio*math.cos(math.radians(alpha)) + centro[0]
             y = -radio*math.sin(math.radians(alpha)) + centro[1]
             glVertex3f(x, y, 0)
             v.append((x,y,0))
-        # x0, y0 = -radio*math.cos(math.radians(-90)) + centro[0], radio*math.sin(math.radians(-90)) + centro[1]
-        # x1, y1 = -radio*math.cos(math.radians(90)) + centro[0], radio*math.sin(math.radians(90)) + centro[1]
     glEnd()
     return v
     
@@ -113,19 +107,18 @@ def hoja():
 
     ejes() # pintar los ejes X=rojo, Y=verde, Z=azul
 
+    verdePlanta = (45/255, 87/255, 44/255)
+
     # USANDO EL ALGORITMO DEL PINTOR 
     # (dibujar primero los objetos lejanos, los de atras)
     # Vertices en sentido antihorario
-    cantidadHojasPar = 4
-    alturaHoja = 0.1
-    beta = math.radians(30)
     vInicial = (0,0,0)
     vFinal = (0.5, 0.5, 0)
     verticesHoja.append(vInicial)
     verticesHoja.append(vFinal)
     m = (vFinal[1]-vInicial[1])/(vFinal[0]-vInicial[0])
     alpha = math.atan(m)
-    rectaStrip(verticesHoja, (0.1, 0.8, 0.2))
+    rectaStrip(verticesHoja, verdePlanta)
 
     cX = vFinal[0]/cantidadHojasPar
     cY = vFinal[1]/cantidadHojasPar
@@ -134,20 +127,41 @@ def hoja():
         puntosHojas.append((verticesHoja[0][0] + i*cX, verticesHoja[0][1] + i*cY, 0))
         # punto([(verticesHoja[0][0] + i*cX, verticesHoja[0][1] + i*cY, 0)], (0.1, 0.7, 0.2))
 
-    punto(puntosHojas, (0.1, 0.7, 0.2))
+    # punto(puntosHojas, (0.1, 0.7, 0.2))
+
     puntosExternos = []
-    for p in puntosHojas:
-        x = p[0] + alturaHoja*math.cos(alpha + beta) 
-        y = p[1] + alturaHoja*math.sin(alpha + beta) 
-        puntosExternos.append((x, y, 0))
+    puntosExternos.append((puntosHojas[0][0] + alturaHoja*math.cos(alpha + beta), puntosHojas[0][1] + alturaHoja*math.sin(alpha + beta), 0))
 
-    punto(puntosExternos, (1, 1, 0))
+    a = puntosExternos[0][0] - puntosHojas[0][0] 
+    b = puntosExternos[0][1] - puntosHojas[0][1] 
+    c = 0
 
-    vertices = []
-    for i in range(cantidadHojasPar):
-        vertices.append(puntosHojas[i])
-        vertices.append(puntosExternos[i])
-    recta(vertices, (0,1,1))
+    vectorRaiz = (a,b,c)
+    normalRaiz1 = (-b,a,c)
+    normalRaiz2 = (b,-a,c)
+
+    # hojas de arriba
+    for i in range(0, cantidadHojasPar):
+        glPushMatrix()
+        v1, v2, v3 = puntosHojas[i][0], puntosHojas[i][1], puntosHojas[i][2]
+        glTranslate(v1, v2, v3)
+        bezier1 = bezierCuadratico(puntosHojas[0], (a + normalRaiz1[0], b + normalRaiz1[1], 0 ), puntosExternos[0])
+        bezier2 = bezierCuadratico(puntosHojas[0], (a + normalRaiz2[0], b + normalRaiz2[1], 0 ), puntosExternos[0])
+        rectaLoop(bezier1, verdePlanta)
+        rectaLoop(bezier2,  verdePlanta)
+        glPopMatrix()
+
+    # hojas de abajo
+    for i in range(0, cantidadHojasPar):
+        glPushMatrix()
+        v1, v2, v3 = vFinal[0] - vInicial[0], vFinal[1] - vInicial[1], vFinal[2] - vInicial[2]
+        glTranslate(puntosHojas[i][0], puntosHojas[i][1], puntosHojas[i][2])
+        glRotate(180, v1, v2, v3)
+        bezier1 = bezierCuadratico(puntosHojas[0], (a + normalRaiz1[0], b + normalRaiz1[1], 0 ), puntosExternos[0])
+        bezier2 = bezierCuadratico(puntosHojas[0], (a + normalRaiz2[0], b + normalRaiz2[1], 0 ), puntosExternos[0])
+        rectaLoop(bezier1,  verdePlanta)
+        rectaLoop(bezier2,  verdePlanta)
+        glPopMatrix()
 
     glFlush() # Para forzar a que pinte.
     # glFinish()
@@ -219,28 +233,52 @@ def display():
 
 # Captura las teclas
 def buttons(key, x, y):
-    global ojoz, ojox, ojoy, horizontal, vertical, radio, cantidadPuntas
+    global ojoz, ojox, ojoy, teta, phi, radio, cantidadHojasPar, alturaHoja, beta
     print(f'key={key}')
     match key:
         case b'r':
-            vertical, horizontal, radio, cantidadPuntas = 0, 0, 0.3, 6
-            print('La figura volvio a su tamanho y posicion inicial.')
+            ojox, ojoy, ojoz, = x0, y0, z0
+            teta = math.acos(ojoz/radio) # angulo vertical de la camara (PLANO YOZ, X = constante)
+            phi = math.asin(ojoz/radio) # angulo horizontal de la camara (PLANO XOZ, Y = constante)
+            cantidadHojasPar = 4
+            alturaHoja = 0.1
+            beta = math.radians(45)
+            print('La figura volvio a su tamanho y disposicion inicial.')
         case b's':
-            vertical -= 0.01
+            if alturaHoja > 0.05:
+                alturaHoja -= 0.01
         case b'a':
-            horizontal -= 0.01
+            beta -= 0.1
         case b'w':
-            vertical += 0.01
+            alturaHoja += 0.01
         case b'd':
-            horizontal += 0.01
-        case b'i':
-            radio += 0.01
-        case b'k':
-            radio -= 0.01
+            beta += 0.1
         case b'+':
-            cantidadPuntas += 1
+            cantidadHojasPar += 1
         case b'-':
-            cantidadPuntas -= 1
+            if cantidadHojasPar > 1:
+                cantidadHojasPar -= 1
+
+    glutPostRedisplay() # Dibuja otra vez.
+
+def handleSpecialKeypress(key, x, y):
+    global teta, phi, ojox, ojoy, ojoz
+    if key == GLUT_KEY_UP:
+        teta += 0.1
+        ojoy = radio*math.sin(teta)
+        ojoz = radio*math.cos(teta)
+    elif key == GLUT_KEY_DOWN:
+        teta -= 0.1
+        ojoy = radio*math.sin(teta)
+        ojoz = radio*math.cos(teta)
+    elif key == GLUT_KEY_LEFT:
+        phi += 0.1
+        ojoz = radio*math.sin(phi)
+        ojox = radio*math.cos(phi)
+    elif key == GLUT_KEY_RIGHT:
+        phi -= 0.1
+        ojoz = radio*math.sin(phi)
+        ojox = radio*math.cos(phi)
     glutPostRedisplay() # Dibuja otra vez.
 
 # Funcion principal.
@@ -252,6 +290,7 @@ def main():
     glutCreateWindow("hoja ") # Crear ventana emergente y darle titulo.
     glutDisplayFunc(display) # Que pinte la funcion
     glutKeyboardFunc(buttons) # callback para los botones.
+    glutSpecialFunc(handleSpecialKeypress)
     glutMainLoop() # mantiene la ventana corriendo en bucle.
     
 main()
