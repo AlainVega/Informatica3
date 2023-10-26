@@ -5,6 +5,7 @@ from OpenGL.GL import *
 from OpenGL.GLUT import *
 from OpenGL.GLU import *
 import math
+from time import perf_counter, sleep
 
 #variables globales
 ancho, alto = 800, 800 # Para la ventana emergente.
@@ -21,6 +22,7 @@ cantidadRectangulos = 4
 angulo = 45
 largo = 0.2
 time = 0
+fps = 60
 
 ############################################################################################################################################################
 # Funciones auxiliares.
@@ -189,6 +191,29 @@ def ejes():
 
     glEnd() # Fin contexto lineas
 
+def tiempo(alpha):
+    glColor((0.1, 0.7, 0.1))
+    global time
+    time += 0.1
+
+    # Start timer
+    start = perf_counter()
+    # print(start)
+    
+    glPushMatrix()
+    glRotate(alpha*time, 0, 1, 0)
+    glTranslate(0.8, 0, 0)
+    glRotate(alpha*time, 0, 1, 0)
+    glutSolidSphere(0.1, 9, 3)
+    glPopMatrix()
+    
+    stop = perf_counter()
+    mili = ( 1000/fps - (stop - start) ) * 0.001
+    sleep(mili)
+
+    glutPostRedisplay() # Dibuja otra vez.
+
+
 ############################################################################################################################################################
 # Funcion que define la logica del problema.
 ############################################################################################################################################################
@@ -197,18 +222,11 @@ def orbita():
     ejes() # pintar los ejes X=rojo, Y=verde, Z=azul
 
     glColor((1,1,0))
-    glutSolidSphere(0.1, 70, 70)
-    global time
-    time += 0.01
+    glutSolidSphere(0.3, 70, 70)
     alpha = 4
-    glColor((0.1, 0.7, 0.1))
-    glPushMatrix()
-    glRotate(4*time, 0, 1, 0)
-    glTranslate(0.5, 0, 0)
-    glutSolidSphere(0.03, 70, 70)
-    glPopMatrix()
-
+    tiempo(alpha)
     glFlush() # Para forzar a que pinte.
+
     # glFinish()
 
 ############################################################################################################################################################
@@ -236,7 +254,7 @@ def display():
 
     # Desde, Hacia, Dirección arriba
     gluLookAt(ojox, ojoy, ojoz, 0, 0, 0, 0.0, 1.0, 0.0)
-
+    
     orbita()
 
 ############################################################################################################################################################
@@ -245,7 +263,7 @@ def display():
 
 # Captura las teclas distintas funciones.
 def buttons(key, x, y):
-    global ojoz, ojox, ojoy, teta, phi, radio, angulo, cantidadRectangulos, largo
+    global ojoz, ojox, ojoy, teta, phi, radio, angulo, cantidadRectangulos, largo, fps
     # print(f'key={key}')
     match key:
         case b'r':
@@ -267,9 +285,10 @@ def buttons(key, x, y):
         case b'd':
             largo += 0.001
         case b'+':
-            angulo -= 1
+            fps += 1
         case b'-':
-            angulo += 1
+            if fps > 1:
+                fps -= 1
 
     glutPostRedisplay() # Dibuja otra vez.
 
@@ -316,6 +335,6 @@ def main():
     glutDisplayFunc(display) # Que pinte la funcion
     glutKeyboardFunc(buttons) # callback para los botones.
     glutSpecialFunc(handleSpecialKeypress)
-    glutIdleFunc(display)
+    # glutIdleFunc(display)
     glutMainLoop() # mantiene la ventana corriendo en bucle.
 main()
