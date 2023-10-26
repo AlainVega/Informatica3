@@ -34,16 +34,7 @@ size = 1
 
 # Sirve para dibujar la cara del poligono. (Pintar el ancho del estrella)
 def cara(vertices, color):
-    # Setear las propiedades del material.
-    c = [color[0], color[1], color[2], 1]
-    # glMaterialfv(GL_FRONT, GL_DIFFUSE, c) 
-    # glMaterialfv(GL_FRONT, GL_SPECULAR, rojo) 
-    # glMaterialfv(GL_FRONT, GL_EMISSION, c) 
-    # glMaterialfv(GL_FRONT, GL_SHININESS, 10) 
-    # glMaterialfv(GL_FRONT, GL_AMBIENT, c) 
-
     glColor(color[0], color[1], color[2], 1) # pintar con este color
-
     glBegin(GL_QUADS) # dibuja triangulos para simular el hexagono.
     for vertice in vertices:
         glVertex3fv(vertice)
@@ -167,22 +158,16 @@ def ejes():
 
     # Eje X (ROJO)
     glColor3f(1, 0, 0)
-    rojo = [1, 0, 0, 0]
-    # glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, rojo)
     glVertex3f(0, 0, 0)
     glVertex3f(largo, 0, 0)
 
     # Eje Y (VERDE)
     glColor3f(0, 1, 0)
-    verde = [0, 1, 0, 0]
-    # glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, verde)
     glVertex3f(0, 0, 0)
     glVertex3f(0, largo, 0)
 
     # Eje Z (AZUL)
     glColor3f(0, 0, 1)
-    azul = [0, 0, 1, 0]
-    # glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, azul)
     glVertex3f(0, 0, 0)
     glVertex3f(0, 0, largo)
 
@@ -193,19 +178,6 @@ def display():
     # global ojox, ojoy, ojoz
     glEnable(GL_DEPTH_TEST)
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);  
-    
-    # Luz
-    origen = [0,0,0]
-    # glShadeModel(GL_SMOOTH)
-    # glEnable(GL_CULL_FACE)
-    # glEnable(GL_LIGHTING) # habilitar luces
-    # glLightfv(GL_LIGHT0, GL_POSITION, lightZeroPosition) # posicion de la luz
-    # glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, origen) # direccion de la luz
-    # glLightfv(GL_LIGHT0, GL_DIFFUSE, lightZeroColor) # color difuso de la luz
-    # glLightfv(GL_LIGHT0, GL_AMBIENT, ambientColor) # color ambiente
-    # glLightf(GL_LIGHT0, GL_CONSTANT_ATTENUATION, 0.1)
-    # glLightf(GL_LIGHT0, GL_LINEAR_ATTENUATION, 0.05)
-    # glEnable(GL_LIGHT0)
 
     # Selecciona la matriz de proyección
     glMatrixMode(GL_PROJECTION)
