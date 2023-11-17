@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <title>1</title>
+    </head>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+<body>
+    <div id="main" style="width: 600px;height:400px;"></div>
+    <div id="main2" style="width: 600px;height:400px;"></div>
+    <div id="main3" style="width: 600px;height:400px;"></div>
+    <script type="text/javascript">
+        // Initialize the echarts instance based on the prepared dom
+        var myChart = echarts.init(document.getElementById('main'),'light',{'renderer':'svg'});
+        
+        // Specify the configuration items and data for the chart
+        var option = {
+            title: {
+                text: 'Echarts con barras (como series)'
+            },
+            tooltip: {},
+            legend: {
+                data: ['Precios']
+            },
+            xAxis: {
+                type: 'category',
+            },
+            yAxis: {},
+            series: [
+                {
+                    type: 'bar',
+                },
+                {
+                    type: 'bar',
+                },
+                {
+                    type: 'bar',
+                }
+            ],
+            dataset: {
+                // Provide a set of data.
+                source: [
+                ['product', '2015', '2016', '2017'],
+                ['Matcha Latte', 43.3, 85.8, 93.7],
+                ['Milk Tea', 83.1, 73.4, 55.1],
+                ['Cheese Cocoa', 86.4, 65.2, 82.5],
+                ['Walnut Brownie', 72.4, 53.9, 39.1]
+                ]
+            },                
+        };
+
+        // Display the chart using the configuration items and data just specified.
+        myChart.setOption(option);
+        
+        myChart = echarts.init(document.getElementById('main2'),'light',{'renderer':'svg'});
+        option = {
+            title: {
+                text: 'Por mes'
+            },
+            tooltip: {},
+            legend: {
+                data: []
+            },
+            xAxis: {
+                type: 'category',
+            },
+            yAxis: {},
+            series: [
+                {
+                    type: 'bar',
+                },
+                {
+                    type: 'bar',
+                },
+                {
+                    type: 'bar',
+                }
+            ],
+            dataset: {
+                // Provide a set of data.
+                source: [
+                ['Enero', 789, 1571, 586],
+                ['Febrero', 1525, 673, 708],
+                ['Marzo', 1239, 954, 1152],
+                ['Abril', 1388, 748, 1976],
+                ['Mayo', 1173, 738, 1641],
+                ['Junio', 1342, 1105, 1628],
+                ['Julio', 1874, 872, 1066],
+                ],
+            },                
+        };
+
+        // Display the chart using the configuration items and data just specified.
+        myChart.setOption(option);
+
+        // Display the chart using the configuration items and data just specified.
+        myChart.setOption(option);
+        
+        myChart = echarts.init(document.getElementById('main3'),'light',{'renderer':'svg'});
+        option = {
+            title: {
+                text: 'Por ANHO'
+            },
+            tooltip: {},
+            legend: {
+                data: []
+            },
+            xAxis: {
+                type: 'category',
+            },
+            yAxis: {},
+            series: [
+                {
+                    type: 'line',
+                },
+                {
+                    type: 'line',
+                },
+                {
+                    type: 'line',
+                },
+                {
+                    type: 'line',
+                },
+                {
+                    type: 'line',
+                },
+                {
+                    type: 'line',
+                },
+                {
+                    type: 'line',
+                }
+            ],
+            dataset: {
+                // Provide a set of data.
+                source: [
+                ['2020', 789, 1525, 1239, 1388, 1173, 1342, 1874],
+                ['2021', 1571, 673, 954, 748, 738, 1105, 872],
+                ['2022', 586, 708, 1152, 1976, 1641, 1628, 1066],
+                ],
+            },                
+        };
+
+        // Display the chart using the configuration items and data just specified.
+        myChart.setOption(option);
+
+    </script>
+</body>
+</html>
