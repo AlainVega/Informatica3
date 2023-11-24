@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- incluimos la libreria -->
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+</head>
+<body>
+    <h1>Tipos de graficos</h1>
+    <!-- creamos un tag html al cual le agregaremos el grafico -->
+    <h2>Barra</h2>
+    <div id="chart1"></div>
+    <h2>Linea</h2>
+    <div id="chart2"></div>
+    <h2>Area</h2>
+    <div id="chart3"></div>
+    <h2>Torta</h2>
+    <div id="chart4"></div>
+    <h2>Dona</h2>
+    <div id="chart5"></div>
+    <h2>Radar o telaranha (el que usa CS y FIFA)</h2>
+    <div id="chart6"></div>
+    <h2>Barra radial (el del porcentaje de carga)</h2>
+    <div id="chart7"></div>
+    <div id="chart8"></div>
+
+    <script>
+        let options = {
+            chart: {
+                type: 'bar'
+            },
+            series: [{
+                data: [23, 11, 54, 72, 12]
+            }],
+            labels: ["Apple", "Mango", "Banana", "Papaya", "Orange"],
+        }
+        // crea el grafico
+        var chart = new ApexCharts(document.querySelector("#chart1"), options);
+        chart.render(); // mostra el grafico
+
+        options = {
+            chart: {
+                type: 'line'
+            },
+            series: [{
+                data: [23, 11, 54, 72, 12]
+            }],
+            labels: ["Apple", "Mango", "Banana", "Papaya", "Orange"],
+        }
+        // crea el grafico
+        chart = new ApexCharts(document.querySelector("#chart2"), options);
+        chart.render(); // mostra el grafico
+
+        options = {
+            chart: {
+                type: 'area'
+            },
+            series: [{
+                data: [23, 11, 54, 72, 12]
+            }],
+            labels: ["Apple", "Mango", "Banana", "Papaya", "Orange"],
+        }
+        // crea el grafico
+        chart = new ApexCharts(document.querySelector("#chart3"), options);
+        chart.render(); // mostra el grafico
+
+        options = {
+            chart: {
+                type: 'pie'
+            },
+            series: [23, 11, 54, 72, 12],
+            labels: ["Apple", "Mango", "Banana", "Papaya", "Orange"],
+        }
+        // crea el grafico
+        chart = new ApexCharts(document.querySelector("#chart4"), options);
+        chart.render(); // mostra el grafico
+
+        options = {
+            chart: {
+                type: 'donut'
+            },
+            series: [23, 11, 54, 72, 12],
+            labels: ["Apple", "Mango", "Banana", "Papaya", "Orange"],
+        }
+        // crea el grafico
+        chart = new ApexCharts(document.querySelector("#chart5"), options);
+        chart.render(); // mostra el grafico
+
+        options = {
+            chart: {
+                type: 'radar'
+            },
+            series: [{
+                data: [23, 11, 54, 72, 12]
+            }],
+            labels: ["Apple", "Mango", "Banana", "Papaya", "Orange"],
+        }
+        // crea el grafico
+        chart = new ApexCharts(document.querySelector("#chart6"), options);
+        chart.render(); // mostra el grafico
+
+        options = {
+            chart: {
+                type: 'radialBar'
+            },
+            series: [23, 11, 54, 72, 12],
+            labels: ["Apple", "Mango", "Banana", "Papaya", "Orange"],
+            plotOptions: {
+                radialBar: {
+                    dataLabels: {
+                        total: {
+                            show: true,
+                            label: 'Total'
+                        }
+                    }
+                },
+            },
+        }
+        // crea el grafico
+        chart = new ApexCharts(document.querySelector("#chart7"), options);
+        chart.render(); // mostra el grafico
+
+    </script>
+</body>
+</html>

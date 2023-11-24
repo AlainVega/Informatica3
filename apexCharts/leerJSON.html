@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- incluimos la libreria -->
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <!-- javascript no te quiero mucho -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <h1>Pares (x,y) </h1>
+    <!-- creamos un tag html al cual le agregaremos el grafico -->
+    <div id="chart"></div> 
+    <script>
+        var json_url = "http://127.0.0.1:3000/apexCharts/data.json";
+        
+        $.getJSON(json_url, function(data){
+            // console.log(data.labels)
+            let options = {
+                chart: {
+                    type: 'bar'
+                },
+                series: [{
+                    data: data.series   
+                }],
+                labels: data.labels
+            }
+            var chart = new ApexCharts(document.querySelector("#chart"), options);
+            chart.render(); // mostra el grafico
+        }) 
+        // chart.render(); // mostra el grafico
+
+
+        // $.getJSON(json_url, function(data) {
+        //     var fr = data
+        //     var options = {
+        //         chart: {
+        //             type: 'bar',
+        //             locales: [fr],
+        //             defaultLocale: 'fr',
+        //         },
+        //         series: data.series,
+        //         labels: data.labels
+        //     }
+        // });  
+        
+        // alert(options)
+        // // crea el grafico
+        
+
+    </script>
+</body>
+</html>

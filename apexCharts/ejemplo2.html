@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- incluimos la libreria -->
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+</head>
+<body>
+    <h1>Muchos ejemplos</h1>
+    <!-- creamos un tag html al cual le agregaremos el grafico -->
+    <div id="chart1"></div>
+    <div id="chart2"></div> 
+    <div id="chart3"></div> 
+    <div id="chart4"></div>
+    <div id="chart4"></div>
+    <div id="chart5"></div>
+    <div id="chart6"></div>
+    <div id="chart7"></div>
+    <div id="chart8"></div>
+    <!-- <div id="chart5"></div>   -->
+    <script>
+        //////////////////////////////////////////////////////////////////
+        let options = { //definimos las propiedades del grafico.
+            chart: {
+                type: 'bar'
+            },
+            series: [{
+                data: [[1, 34], [3, 54], [5, 23], [15, 43]]
+            }], 
+            xaxis: {
+                type: 'numeric'
+            }
+        }
+        var chart = new ApexCharts(document.querySelector("#chart1"), options); // crea el grafico
+        chart.render(); // mostra el grafico
+        //////////////////////////////////////////////////////////////////
+        options = {
+            chart: {
+                type: 'bar'
+            },
+            series: [{
+                data: [{x: 'Apple', y: 54}, {x: 'Orange',y: 66}],
+            }],
+            xaxis: {
+                type: 'category'
+            }
+        }
+        chart = new ApexCharts(document.querySelector("#chart2"), options); // crea el grafico
+        chart.render(); // mostra el grafico
+        //////////////////////////////////////////////////////////////////
+        options = {
+            chart: {
+                type: 'bar'
+            },
+            series: [{
+                data: [{x: 'Apple', y: 54}, {x: 'Orange',y: 66}],
+            }],
+            xaxis: {
+                type: 'category'
+            }
+        }
+
+        options = {
+            chart: {
+                type: 'bar'
+            },
+            series: [{
+                name: "el valor es",
+                data: [
+                    [1486684800000, 34], 
+                    [1486771200000, 43], 
+                    [1486857600000, 31], 
+                    [1486944000000, 43], 
+                    [1487030400000, 33], 
+                    [1487116800000, 52]
+                ]
+            }],
+            xaxis: {
+                type: 'datetime'
+            }
+        }
+        chart = new ApexCharts(document.querySelector("#chart3"), options); // crea el grafico
+        chart.render(); // mostra el grafico
+        //////////////////////////////////////////////////////////////////
+
+        options = {
+            chart: {
+                type: 'bar'
+            },
+            series: [{
+                name: "el valor es",
+                data: [
+                    { x: '05/06/2014', y: 54 }, 
+                    { x: '05/08/2014', y: 17 }, 
+                    { x: '05/28/2014', y: 26 }
+                ]
+            }],
+            xaxis: {
+                type: 'datetime'
+            }
+        }
+        chart = new ApexCharts(document.querySelector("#chart4"), options); // crea el grafico
+        chart.render(); // mostra el grafico
+        //////////////////////////////////////////////////////////////////
+
+        options = {
+            chart: {
+                type: 'pie'
+            },
+            series: [23, 11, 54, 72, 12],
+            labels: ["Apple", "Mango", "Banana", "Papaya", "Orange"],
+            // xaxis: {
+            //     type: 'categories'
+            // }
+        }
+        chart = new ApexCharts(document.querySelector("#chart5"), options); // crea el grafico
+        chart.render(); // mostra el grafico
+        //////////////////////////////////////////////////////////////////
+
+        options = { //definimos las propiedades del grafico.
+            chart: {
+                type: 'bar'
+            },
+            series: [{
+                data: [[1, 34], [3, 54], [5, 23], [15, 43]]
+            }], 
+            xaxis: {
+                type: 'numeric'
+            },
+            // colors:['#F44336', '#E91E63', '#9C27B0'],
+            responsive: [
+                {
+                    breakpoint: 1000,
+                    options: {
+                        colors:['#9C27B0'],
+                    }
+                }
+            ]
+        }
+        chart = new ApexCharts(document.querySelector("#chart6"), options); // crea el grafico
+        chart.render(); // mostra el grafico
+        //////////////////////////////////////////////////////////////////
+    </script>
+</body>
+</html>
